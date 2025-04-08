@@ -35,7 +35,7 @@ typedef struct
 
 typedef struct
 {
-	// Strangely, blue comes first in the pixel...
+	// each byte of color combines to create one pixel
 	BYTE bBlu, bGrn, bRed;
 } PIXEL;
 
@@ -46,6 +46,31 @@ typedef struct
 	PIXEL* bmData;
 } IMAGE;
 
+#pragma pack(pop) // Used to reset the default byte alignment
+
+// Open a file given a prompt for the user (for the type of file) and a file mode
+FILE* GetFile(const char* cPrompt, const char* cMode);
+// Read an image into the image pointer provided from the already opened file pointer
+void ReadImage(IMAGE* imgPtr, FILE* infile);
+
+// Read the image header into the image pointer provided from the already opened file pointer
+void ReadHeader(IMAGE* imgPtr, FILE* infile);
+
+// Read the image data into the image pointer provided from the already opened file pointer
+void ReadData(IMAGE* imgPtr, FILE* infile);
+
+// Write the image header and image data from the image pointer provided
+// into the already opened file
+void WriteImage(IMAGE* imgPtr, FILE* outfile);
+
+// Free the image header and image data from the passed-in image pointer
+void FreeImage(IMAGE* imgPtr);
+
 void HideInImage(IMAGE* imgPtr, FILE* filePtr);
+
+void ExtractFileFromImage(IMAGE* imgPtr, FILE* filePtr);
+
+unsigned int GetFileSize(FILE* filePtr);
+
 
 #endif // !ASSIGN3_H

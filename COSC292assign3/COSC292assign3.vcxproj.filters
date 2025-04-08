@@ -14,4 +14,24 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="program.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assign3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="assign3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="x64\Debug\COSC292assign3.tlog\COSC292assign3.lastbuildstate" />
+    <None Include="x64\Debug\COSC292assign3.exe.recipe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="x64\Debug\COSC292assign3.log" />
+  </ItemGroup>
 </Project>
