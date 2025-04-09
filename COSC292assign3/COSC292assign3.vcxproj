@@ -133,6 +133,13 @@
   <ItemGroup>
     <ClInclude Include="assign3.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="x64\Debug\COSC292assign3.exe.recipe" />
+    <None Include="x64\Debug\COSC292assign3.tlog\COSC292assign3.lastbuildstate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="x64\Debug\COSC292assign3.log" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

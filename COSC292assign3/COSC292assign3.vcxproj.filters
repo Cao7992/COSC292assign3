@@ -27,4 +27,11 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="x64\Debug\COSC292assign3.tlog\COSC292assign3.lastbuildstate" />
+    <None Include="x64\Debug\COSC292assign3.exe.recipe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="x64\Debug\COSC292assign3.log" />
+  </ItemGroup>
 </Project>

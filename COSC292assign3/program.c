@@ -20,29 +20,42 @@ void testHideInImage()
 	// Create an image struct instance
 	IMAGE img = { NULL, NULL };
 
-	// Read in the image
-	ReadImage(&img, infile);
-	// close the file
-	fclose(infile);
-
-	// If the hidden file will fit within the image
-	if (img.bmHDR->lWidth * img.bmHDR->lHeight >= GetFileSize(hidefile))
+	if (infile != NULL && hidefile != NULL)
 	{
-		HideInImage(&img, hidefile);
-		fclose(hidefile);
+		// Read in the image
+		ReadImage(&img, infile);
+		// close the file
+		fclose(infile);
 
-		// Write the image with hidden data out to file
-		outfile = GetFile("Enter name of image with hidden file: ", "wb");
-		WriteImage(&img, outfile);
-		fclose(outfile);
-	}
-	else
-	{
-		printf("File is too big to hide in image\n");
-		fclose(hidefile);
-	}
+		if (img.bmHDR != NULL)
+		{
+			// If the hidden file will fit within the image
+			if (img.bmHDR->lWidth * img.bmHDR->lHeight >= GetFileSize(hidefile))
+			{
+				HideInImage(&img, hidefile);
+				fclose(hidefile);
 
-	// Free any memory required
+				// Write the image with hidden data out to file
+				outfile = GetFile("Enter name of image with hidden file: ", "wb");
+				WriteImage(&img, outfile);
+				fclose(outfile);
+			}
+			else
+			{
+				printf("File is too big to hide in image\n");
+				fclose(hidefile);
+			}
+
+			// Free any memory
+			FreeImage(&img);
+		}
+		else {
+			printf("Read in empty image\n");
+		}
+	}
+	else {
+		printf("Can not open one of the files\n");
+	}
 
 }
 
@@ -71,7 +84,8 @@ int main()
 	//printf("Size of BITMAPHDR: %zu\n", sizeof(BITMAPHDR));
 	//printf("Size of PIXEL: %zu\n", sizeof(PIXEL));
 
-	TestResizeCanvas();
+	testHideInImage();
+	//testExtractFileFromImage();
 
 	_CrtDumpMemoryLeaks();
 
