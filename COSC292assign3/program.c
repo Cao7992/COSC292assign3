@@ -33,6 +33,7 @@ void testHideInImage()
 			if (img.bmHDR->lWidth * img.bmHDR->lHeight >= GetFileSize(hidefile))
 			{
 				HideInImage(&img, hidefile);
+				img.bmHDR->dwClrImportant = GetFileSize(hidefile);
 				fclose(hidefile);
 
 				// Write the image with hidden data out to file
@@ -66,15 +67,28 @@ void testExtractFileFromImage()
 	FILE* outfile = GetFile("Enter filename to extract to: ", "wb");
 	IMAGE img = { NULL, NULL };
 
-	// Read in the image
-	ReadImage(&img, infile);
-	// Close the file
-	fclose(infile);
+	if (infile != NULL && outfile != NULL)
+	{
+		// Read in the image
+		ReadImage(&img, infile);
+		// Close the file
+		fclose(infile);
 
-	ExtractFileFromImage(&img, outfile);
-	fclose(outfile);
+		if (img.bmHDR != NULL)
+		{
+			ExtractFileFromImage(&img, outfile);
+			fclose(outfile);
 
-	// Free any memory required
+			// Free any memory required
+			FreeImage(&img);
+		}
+		else {
+			printf("Read in empty image\n");
+		}
+	}
+	else {
+
+	}
 
 }
 
@@ -85,7 +99,7 @@ int main()
 	//printf("Size of PIXEL: %zu\n", sizeof(PIXEL));
 
 	testHideInImage();
-	//testExtractFileFromImage();
+	testExtractFileFromImage();
 
 	_CrtDumpMemoryLeaks();
 

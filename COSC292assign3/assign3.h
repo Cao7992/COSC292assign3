@@ -30,7 +30,7 @@ typedef struct
 	LONG lXPelsPerMeter;
 	LONG lYPelsPerMeter;
 	DWORD dwClrUsed; // Should be 0 for our application
-	DWORD dwClrImportant;
+	DWORD dwClrImportant; // will be used to store the hidden file size
 } BITMAPHDR;
 
 typedef struct
@@ -66,9 +66,16 @@ void WriteImage(IMAGE* imgPtr, FILE* outfile);
 // Free the image header and image data from the passed-in image pointer
 void FreeImage(IMAGE* imgPtr);
 
+// Hide data from file passed-in as file pointrer in an image passed-in as image pointer
 void HideInImage(IMAGE* imgPtr, FILE* filePtr);
+// Helper method to manipulate a Pixel by hiding a byte in its lower bits
+void hideByteInPixelFunc(PIXEL* currentPixel, BYTE myByte);
 
+// extract data from a image pointer, and write out ontp file pointer
 void ExtractFileFromImage(IMAGE* imgPtr, FILE* filePtr);
+
+// Helper method to extract a BYTE data from  each Pixel passed-in
+BYTE readByteInPixelFunc(PIXEL* currentPixel);
 
 // Purpose: determine the size of an given file
 unsigned int GetFileSize(FILE* filePtr);

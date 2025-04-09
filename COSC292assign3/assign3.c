@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS // to use older functions like fopen instead of fopen_s
+#include <stdlib.h> // for malloc
 #include "assign3.h"
 
 #define MAX_FILENAME_SIZE	256
@@ -117,6 +118,7 @@ void FreeImage(IMAGE* imgPtr)
 	}
 }
 
+// Hide data from file passed-in as file pointrer in an image passed-in as image pointer
 void HideInImage(IMAGE* imgPtr, FILE* filePtr)
 {
 	PIXEL* currentPixel = imgPtr->bmData;
@@ -127,11 +129,12 @@ void HideInImage(IMAGE* imgPtr, FILE* filePtr)
 	{
 		for (int j = 0; j < imgPtr->bmHDR->lWidth; j++) // for each pixel
 		{
-			if (myByte = fgetc(filePtr) == EOF)
+			myByte = fgetc(filePtr);
+			if (myByte == EOF)
 			{
 				return;
 			}
-			hideByteInPixelFunc(currentPixel, myByte); // manipulate that pixel
+			hideByteInPixelFunc(currentPixel, (unsigned char)myByte); // manipulate that pixel
 			currentPixel++; // move to the next pixel
 		}
 		// At the end of the row, move padding BYTEs forward
@@ -139,15 +142,50 @@ void HideInImage(IMAGE* imgPtr, FILE* filePtr)
 	}
 }
 
+// Helper method to manipulate a Pixel by hiding a byte in its lower bits
 void hideByteInPixelFunc(PIXEL* currentPixel, BYTE myByte)
 {
+	BYTE bits74 = ((myByte >> 4) & 0b00001111);      // high 4 bits
+	BYTE bits32 = (myByte >> 2) & 0b00000011;        // middle 2 bits
+	BYTE bits10 = myByte & 0b00000011;               // low 2 bits
 
-	return
+	currentPixel->bBlu = (currentPixel->bBlu & 0b11110000) | bits74;
+	currentPixel->bGrn = (currentPixel->bGrn & 0b11111100) | bits32;
+	currentPixel->bRed = (currentPixel->bRed & 0b11111100) | bits10;
 }
 
+// extract data from a image pointer, and write out ontp file pointer
 void ExtractFileFromImage(IMAGE* imgPtr, FILE* filePtr)
 {
+	PIXEL* currentPixel = imgPtr->bmData;
+	// The padding, in bytes, for the image is:
+	unsigned int padding = imgPtr->bmHDR->lWidth % 4;
+	unsigned int count = 0;
+	for (int i = 0; i < imgPtr->bmHDR->lHeight; i++) // for each row
+	{
+		for (int j = 0; j < imgPtr->bmHDR->lWidth; j++) // for each pixel
+		{
+			BYTE myByte = readByteInPixelFunc(currentPixel);
+			fputc(myByte, filePtr);
+			if (++count >= imgPtr->bmHDR->dwClrImportant)
+			{
+				return;
+			}
+			currentPixel++; // move to the next pixel
+		}
+		// At the end of the row, move padding BYTEs forward
+		currentPixel = (PIXEL*)(((BYTE*)currentPixel) + padding);
+	}
+}
 
+BYTE readByteInPixelFunc(PIXEL* currentPixel)
+{
+	BYTE result = 0;
+	result = ((currentPixel->bBlu & 0b00001111) << 4) | result;  // extracting bits 7-4
+	result = ((currentPixel->bGrn & 0b00000011) << 2) | result;  // extracting bits 3-2
+	result = ((currentPixel->bRed & 0b00000011) << 0) | result;  // extracting bits 1-0
+	printf("%c \t", (unsigned char)result);
+	return result;
 }
 
 /*
