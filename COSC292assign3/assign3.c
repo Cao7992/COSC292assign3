@@ -184,7 +184,7 @@ BYTE readByteInPixelFunc(PIXEL* currentPixel)
 	result = ((currentPixel->bBlu & 0b00001111) << 4) | result;  // extracting bits 7-4
 	result = ((currentPixel->bGrn & 0b00000011) << 2) | result;  // extracting bits 3-2
 	result = ((currentPixel->bRed & 0b00000011) << 0) | result;  // extracting bits 1-0
-	printf("%c \t", (unsigned char)result);
+	//printf("%c \t", (unsigned char)result);
 	return result;
 }
 

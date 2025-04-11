@@ -30,7 +30,7 @@ void testHideInImage()
 		if (img.bmHDR != NULL)
 		{
 			// If the hidden file will fit within the image
-			if (img.bmHDR->lWidth * img.bmHDR->lHeight >= GetFileSize(hidefile))
+			if ((img.bmHDR->lWidth * img.bmHDR->lHeight) >= GetFileSize(hidefile))
 			{
 				HideInImage(&img, hidefile);
 				img.bmHDR->dwClrImportant = GetFileSize(hidefile);
@@ -64,10 +64,9 @@ void testHideInImage()
 void testExtractFileFromImage()
 {
 	FILE* infile = GetFile("Enter image to extract from: ", "rb");
-	FILE* outfile = GetFile("Enter filename to extract to: ", "wb");
 	IMAGE img = { NULL, NULL };
 
-	if (infile != NULL && outfile != NULL)
+	if (infile != NULL)
 	{
 		// Read in the image
 		ReadImage(&img, infile);
@@ -76,6 +75,7 @@ void testExtractFileFromImage()
 
 		if (img.bmHDR != NULL)
 		{
+			FILE* outfile = GetFile("Enter filename to extract to: ", "wb");
 			ExtractFileFromImage(&img, outfile);
 			fclose(outfile);
 
@@ -87,7 +87,7 @@ void testExtractFileFromImage()
 		}
 	}
 	else {
-
+		printf("Can not open secure file\n");
 	}
 
 }
